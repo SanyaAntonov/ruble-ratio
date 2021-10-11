@@ -3,7 +3,7 @@ package ru.antonov.rubleratio;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Getter
@@ -13,5 +13,5 @@ public class OpenExchangeRatesModel {
     private String license;
     private long timestamp;
     private String base;
-    private Map<String, BigInteger> currencyList;
+    private Map<String, BigDecimal> rates;
 }
