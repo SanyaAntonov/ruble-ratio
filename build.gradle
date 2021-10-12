@@ -19,6 +19,7 @@ ext {
 }
 
 
+
 repositories {
 	mavenCentral()
 }
@@ -35,6 +36,14 @@ dependencies {
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+jar {
+	manifest {
+		attributes(
+				'Main-Class': 'ru.antonov.rubleratio.RubleratioApplication'
+		)
 	}
 }
 
