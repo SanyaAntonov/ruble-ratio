@@ -47,7 +47,7 @@ class RubleratioApplicationTests {
 				.willReturn(yesterday);
 
 		// Must be RICH gif
-		mockMvc.perform(get("/UAH"))
+		mockMvc.perform(get("/compare/UAH"))
 				.andExpect(status().isOk())
 				.andDo(print());
 	}

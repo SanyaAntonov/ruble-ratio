@@ -43,8 +43,8 @@ Nice to Have
 **3. Change properties to yours :**
 ```sh
 giphy.api_key=YOUR_API_KEY
-openexchangerates.appid=YOUR_APP_ID
-openexchangerates.base=RUB
+oer.app_id=YOUR_APP_ID
+oer.base=RUB
 ```
 
 **4 Run this app in your IDE or create Docker container**
@@ -58,7 +58,7 @@ docker run --name ruble-ratio -dp 8080:8080 antonov/ruble-ratio
 
 **5. Start ruble-ratio service :**
 ```sh
-  GET http://localhost:8080/{CurrencyCode}  CurrencyCode - USD,RUB,UAH и тд.
+  GET http://localhost:8080/compare/{CurrencyCode}  CurrencyCode - USD,RUB,UAH и тд.
 ```
 ##
 
