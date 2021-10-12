@@ -1,6 +1,7 @@
 package ru.antonov.rubleratio;
 
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AllArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -8,33 +9,28 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
+@AllArgsConstructor
 public class RatioService {
-    @Value("${openexchangerates.appid}")
-    private String appId;
-    @Value("${openexchangerates.base}")
-    private String base;
-    @Value("${giphy.api_key}")
-    private String apiKey;
     private final GiphyClient giphyClient;
     private final OpenExchangeRatesClient openExchangeRatesClient;
+    private final Environment env;
 
-    public RatioService(GiphyClient giphyClient, OpenExchangeRatesClient openExchangeRatesClient) {
-        this.giphyClient = giphyClient;
-        this.openExchangeRatesClient = openExchangeRatesClient;
-    }
-
-    public Object compareRubleTo(String currencyСode) {
+    public Object compareRubleTo(String currencyCode) {
         OpenExchangeRatesModel today = openExchangeRatesClient.getModel(
-                LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE), appId, base);
+                LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE),
+                env.getProperty("oer.app_id"),
+                env.getProperty("oer.base"));
         OpenExchangeRatesModel yesterday = openExchangeRatesClient.getModel(
-                LocalDateTime.now().minusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE), appId, base);
+                LocalDateTime.now().minusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE),
+                env.getProperty("oer.app_id"),
+                env.getProperty("oer.base"));
 
-        BigDecimal todayRatio = today.getRates().get(currencyСode);
-        BigDecimal yesterdayRatio = yesterday.getRates().get(currencyСode);
+        BigDecimal todayRatio = today.getRates().get(currencyCode);
+        BigDecimal yesterdayRatio = yesterday.getRates().get(currencyCode);
 
-        if (todayRatio.compareTo(yesterdayRatio) >= 0) {
-            return giphyClient.get(apiKey, "rich");
+        if (todayRatio.compareTo(yesterdayRatio) > 0) {
+            return giphyClient.getModelByTag(env.getProperty("giphy.api_key"), "rich");
         } else
-            return giphyClient.get(apiKey, "broke");
+            return giphyClient.getModelByTag(env.getProperty("giphy.api_key"), "broke");
     }
 }
