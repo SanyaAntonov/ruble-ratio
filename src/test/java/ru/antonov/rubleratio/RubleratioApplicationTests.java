@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.env.Environment;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.antonov.rubleratio.feignclients.OpenExchangeRatesClient;
+import ru.antonov.rubleratio.model.OpenExchangeRatesModel;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -29,7 +31,7 @@ class RubleratioApplicationTests {
 	private Environment env;
 
 	@Test
-	void testOpenExchangeRates() throws Exception {
+	void testOpenExchangeRatesRich() throws Exception {
 		OpenExchangeRatesModel today = new OpenExchangeRatesModel();
 		today.setRates(Map.of("UAH", BigDecimal.valueOf(26.402488)));
 		given(this.openExchangeRatesClient.getModel(
@@ -47,6 +49,30 @@ class RubleratioApplicationTests {
 				.willReturn(yesterday);
 
 		// Must be RICH gif
+		mockMvc.perform(get("/compare/UAH"))
+				.andExpect(status().isOk())
+				.andDo(print());
+	}
+
+	@Test
+	void testOpenExchangeRatesBroke() throws Exception {
+		OpenExchangeRatesModel today = new OpenExchangeRatesModel();
+		today.setRates(Map.of("UAH", BigDecimal.valueOf(26.402488)));
+		given(this.openExchangeRatesClient.getModel(
+				LocalDateTime.now().minusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE),
+				env.getProperty("oer.app_id"),
+				env.getProperty("oer.base")))
+				.willReturn(today);
+
+		OpenExchangeRatesModel yesterday = new OpenExchangeRatesModel();
+		yesterday.setRates(Map.of("UAH", BigDecimal.valueOf(26.365275)));
+		given(this.openExchangeRatesClient.getModel(
+				LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE),
+				env.getProperty("oer.app_id"),
+				env.getProperty("oer.base")))
+				.willReturn(yesterday);
+
+		// Must be BROKE gif
 		mockMvc.perform(get("/compare/UAH"))
 				.andExpect(status().isOk())
 				.andDo(print());

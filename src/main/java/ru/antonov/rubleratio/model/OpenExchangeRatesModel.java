@@ -1,4 +1,4 @@
-package ru.antonov.rubleratio;
+package ru.antonov.rubleratio.model;
 
 import lombok.Getter;
 import lombok.Setter;

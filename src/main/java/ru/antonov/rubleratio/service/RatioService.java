@@ -1,8 +1,11 @@
-package ru.antonov.rubleratio;
+package ru.antonov.rubleratio.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import ru.antonov.rubleratio.feignclients.GiphyClient;
+import ru.antonov.rubleratio.feignclients.OpenExchangeRatesClient;
+import ru.antonov.rubleratio.model.OpenExchangeRatesModel;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

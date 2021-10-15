@@ -1,4 +1,4 @@
-package ru.antonov.rubleratio;
+package ru.antonov.rubleratio.feignclients;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

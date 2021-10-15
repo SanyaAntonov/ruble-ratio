@@ -1,8 +1,9 @@
-package ru.antonov.rubleratio;
+package ru.antonov.rubleratio.feignclients;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import ru.antonov.rubleratio.model.OpenExchangeRatesModel;
 
 @FeignClient(value = "OpenExchangeRates", url = "${oer.url}")
 public interface OpenExchangeRatesClient {
